@@ -1,3 +1,4 @@
+```
 usage: main.py [-h] [-c] [-s SCALE] [-f] [-p PATH] [-l LOOP] [-d DEBUG]
 
 Laser engraver control software
@@ -14,3 +15,4 @@ optional arguments:
   -d DEBUG, --debug DEBUG
                         Start engraving in debug mode which print all commands
                         into the specified DEBUG file instead
+```
