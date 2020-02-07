@@ -2,6 +2,7 @@
 from laser_engraver import LaserEngraver
 from matrix import load_vectors
 from argparse import ArgumentParser
+from progressbar import ProgressBar
 import numpy as np
     
 if __name__ == "__main__":
@@ -40,13 +41,18 @@ if __name__ == "__main__":
         laser.set_position_mode("ABSOLUTE")
         laser.set_unit_mode("MILLIMETERS")
 
-        for _ in range(0, args.loop):
-            for vector in vectors:
-                laser.move(vector["x"], vector["y"], args.fast)
-                laser.set_laser(True)
-                laser.move(vector["x"] + vector["length"], vector["y"], args.fast)
-                laser.set_laser(False)
-            laser.move(0, 0) # Reset position
+        with ProgressBar(max_value=args.loop * len(vectors)) as bar:
+            loading = 0
+            for _ in range(0, args.loop):
+                for vector in vectors:
+                    laser.move(vector["x"], vector["y"], args.fast)
+                    laser.set_laser(True)
+                    laser.move(vector["x"] + vector["length"], vector["y"], args.fast)
+                    laser.set_laser(False)
+
+                    loading += 1
+                    bar.update(loading)
+                laser.move(0, 0) # Reset position
 
         if args.debug:
             laser.save_debug_logs(args.debug)
